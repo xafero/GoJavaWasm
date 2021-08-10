@@ -1,8 +1,9 @@
 package org.xafero.gojava.wasm.lib.internal;
 
+import static org.xafero.gojava.wasm.lib.internal.Errors.execute;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -16,8 +17,6 @@ import org.xafero.gojava.wasm.lib.data.Builtins;
 import org.xafero.gojava.wasm.lib.funcs.MyInstanceFunc;
 import org.xafero.gojava.wasm.lib.funcs.MyStaticFunc;
 import org.xafero.gojava.wasm.lib.runtime.Globals;
-
-import static org.xafero.gojava.wasm.lib.internal.Errors.execute;
 
 public class Reflect {
 
@@ -62,8 +61,8 @@ public class Reflect {
 			return item;
 		}
 
-		if (obj instanceof AbstractMap.SimpleEntry<?, ?>) {
-			var pair = (AbstractMap.SimpleEntry<?, ?>) obj;
+		if (obj instanceof Map.Entry<?, ?>) {
+			var pair = (Map.Entry<?, ?>) obj;
 			var index = (long) value;
 			var item = index == 0 ? pair.getKey() : pair.getValue();
 			return item;

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class JsIterator implements AutoCloseable {
 
-	class NextItem {
+	public class NextItem {
 		private boolean done;
 		private Object value;
 

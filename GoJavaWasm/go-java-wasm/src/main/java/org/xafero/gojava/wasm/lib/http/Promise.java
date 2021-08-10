@@ -5,12 +5,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.xafero.gojava.wasm.lib.Error;
 import org.xafero.gojava.wasm.lib.funcs.MyStaticFunc;
 
 import static org.xafero.gojava.wasm.lib.internal.Errors.execute;
 
-class Promise<T> implements AutoCloseable {
+public class Promise<T> implements AutoCloseable {
 	private final Object _handle;
 	private final Object _task;
 	private final Function<T, Object> _wrapper;
@@ -24,8 +25,14 @@ class Promise<T> implements AutoCloseable {
 	@SuppressWarnings("unchecked")
 	public void then(MyStaticFunc onSuccess, MyStaticFunc onFailure) {
 		try {
-			var discard = HttpResponse.BodyHandlers.discarding();
-			var result = ((HttpClient) _handle).send((HttpRequest) _task, discard);
+			Object result;
+			if (_handle instanceof HttpClient) {
+				var bytes = HttpResponse.BodyHandlers.ofByteArray();
+				result = ((HttpClient) _handle).send((HttpRequest) _task, bytes);
+			} else {
+				var raw = (byte[]) _task;
+				result = ArrayUtils.toObject(raw);
+			}
 			var wrap = _wrapper.apply((T) result);
 			execute(onSuccess, wrap);
 		} catch (Exception e) {

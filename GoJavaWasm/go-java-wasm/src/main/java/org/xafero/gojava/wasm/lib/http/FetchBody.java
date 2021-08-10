@@ -2,7 +2,7 @@ package org.xafero.gojava.wasm.lib.http;
 
 import java.net.http.HttpResponse;
 
-class FetchBody {
+public class FetchBody {
 	private final HttpResponse<?> _message;
 	private final FetchResponse _parent;
 

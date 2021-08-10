@@ -2,7 +2,7 @@ package org.xafero.gojava.wasm.lib.http;
 
 import org.xafero.gojava.wasm.lib.data.JsUint8Array;
 
-class ReadResult {
+public class ReadResult {
 	private final byte[] _bytes;
 	private final JsUint8Array _value;
 	private final boolean[] _done;

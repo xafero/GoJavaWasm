@@ -1,22 +1,21 @@
 package org.xafero.gojava.wasm.lib.http;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.http.HttpResponse;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-class BodyReader {
+public class BodyReader {
 	private final HttpResponse<?> _message;
 	private final FetchResponse _parent;
-	private final InputStream _task;
+	private final byte[] _task;
 	private boolean[] _done;
 
 	public BodyReader(FetchResponse parent, HttpResponse<?> message) {
 		_parent = parent;
 		_message = message;
-		_task = (InputStream) _message.body();
+		_task = (byte[]) _message.body();
 		_done = new boolean[] { false };
 	}
 
@@ -33,6 +32,6 @@ class BodyReader {
 	}
 
 	public void cancel() throws IOException {
-		_task.close();
+		// _task.close();
 	}
 }

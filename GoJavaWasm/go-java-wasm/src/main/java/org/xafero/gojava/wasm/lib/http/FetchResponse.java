@@ -2,7 +2,7 @@ package org.xafero.gojava.wasm.lib.http;
 
 import java.net.http.HttpResponse;
 
-class FetchResponse implements AutoCloseable {
+public class FetchResponse implements AutoCloseable {
 	private final HttpResponse<?> _message;
 
 	private Headers headers;
@@ -50,7 +50,7 @@ class FetchResponse implements AutoCloseable {
 		this.status = status;
 	}
 
-	public HttpResponse<?> get_message() {
+	public HttpResponse<?> getMessage() {
 		return _message;
 	}
 
