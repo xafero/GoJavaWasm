@@ -10,7 +10,9 @@ public class ProcSystem {
 	}
 
 	public static String cwd() {
-		var dir = Paths.get("").toAbsolutePath().toString();
+		var path = Paths.get("");
+		var abs = path.toAbsolutePath();
+		var dir = abs.toString();
 		return dir;
 	}
 

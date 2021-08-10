@@ -2,7 +2,7 @@ package org.xafero.gojava.wasm.lib.runtime;
 
 import java.io.File;
 
-class FsStats {
+public class FsStats {
 	private final File _info;
 
 	private Object dev = 1;

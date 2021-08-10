@@ -151,7 +151,7 @@ public class Go implements AutoCloseable {
 		sp >>= 0;
 		var buf = loadSlice(sp + 8);
 		Crypto.getRandomValues(buf);
-		_log.trace("getRandomData {buf}", buf.length);
+		_log.trace("getRandomData {buf}", buf.limit());
 	}
 
 	/**
@@ -300,12 +300,11 @@ public class Go implements AutoCloseable {
 	 * 
 	 * @param sp
 	 */
-	@SuppressWarnings("unchecked")
 	private void valueLoadString(int sp) {
 		sp >>= 0;
-		var str = (Collection<Byte>) loadValue(sp + 8);
+		var str = (byte[]) loadValue(sp + 8);
 		var bytes = loadSlice(sp + 16);
-		Buffers.refill(bytes, str);
+		Buffers.overwrite(bytes, str);
 	}
 
 	private long getInt64(int addr) {
@@ -356,11 +355,11 @@ public class Go implements AutoCloseable {
 		}
 		var srcArray = (Collection<Byte>) src;
 		var interm = ArrayUtils.toPrimitive(srcArray.toArray(new Byte[srcArray.size()]));
-		var toCopy = ArrayUtils.subarray(interm, 0, dst.length);
-		Buffers.refill(dst, toCopy);
+		var toCopy = ArrayUtils.subarray(interm, 0, dst.limit());
+		Buffers.overwrite(dst, toCopy);
 		setInt64(sp + 40, toCopy.length);
 		_mem.writeByte(_store, sp + 48, (byte) 1);
-		_log.trace("copyBytesToGo {src} {dst} {toCopy}", srcArray.size(), dst.length, toCopy.length);
+		_log.trace("copyBytesToGo {src} {dst} {toCopy}", srcArray.size(), dst.limit(), toCopy.length);
 	}
 
 	/**
@@ -378,11 +377,11 @@ public class Go implements AutoCloseable {
 			return;
 		}
 		var dstArray = (Collection<Byte>) dst;
-		var toCopy = ArrayUtils.subarray(src, 0, dstArray.size());
+		var toCopy = ArrayUtils.subarray(Buffers.copy(src), 0, dstArray.size());
 		Buffers.refill(dstArray, toCopy);
 		setInt64(sp + 40, toCopy.length);
 		_mem.writeByte(_store, sp + 48, (byte) 1);
-		_log.trace("copyBytesToJS {src} {dst} {toCopy}", src.length, dstArray.size(), toCopy.length);
+		_log.trace("copyBytesToJS {src} {dst} {toCopy}", src.limit(), dstArray.size(), toCopy.length);
 	}
 
 	private String loadString(int addr) {
@@ -553,13 +552,11 @@ public class Go implements AutoCloseable {
 		}
 	}
 
-	private byte[] loadSlice(int addr) {
+	private ByteBuffer loadSlice(int addr) {
 		var array = getInt64(addr + 0);
 		var len = getInt64(addr + 8);
 		var bytes = getMemSlice((int) array, (int) len);
-		var copy = new byte[(int) len];
-		bytes.get(copy);
-		return copy;
+		return bytes;
 	}
 
 	/**

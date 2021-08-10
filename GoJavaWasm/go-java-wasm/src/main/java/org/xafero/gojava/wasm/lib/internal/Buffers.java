@@ -1,5 +1,6 @@
 package org.xafero.gojava.wasm.lib.internal;
 
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -42,5 +43,17 @@ public class Buffers {
 	public static void overwrite(List<Byte> dest, byte[] source) {
 		for (var i = 0; i < source.length; i++)
 			dest.set(i, source[i]);
+	}
+
+	public static void overwrite(ByteBuffer buffer, byte[] source) {
+		for (var i = 0; i < source.length; i++)
+			buffer.put(i, source[i]);
+	}
+
+	public static byte[] copy(ByteBuffer src) {
+		var bytes = new byte[src.limit()];
+		for (int i = 0; i < bytes.length; i++)
+			bytes[i] = src.get(i);
+		return bytes;
 	}
 }
