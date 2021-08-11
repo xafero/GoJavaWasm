@@ -503,6 +503,8 @@ public class Go implements AutoCloseable {
 			typeFlag = 0;
 		} else if (v instanceof Object) {
 			typeFlag = 1;
+		} else {
+			throw new UnsupportedOperationException(typeFlag + " ?");
 		}
 
 		switch (v.getClass().getSimpleName()) {

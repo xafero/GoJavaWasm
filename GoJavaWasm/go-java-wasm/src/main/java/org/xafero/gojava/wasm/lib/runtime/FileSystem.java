@@ -78,8 +78,8 @@ public class FileSystem {
 		return buf.size();
 	}
 
-	public void write(double fd, List<Byte> buf, int offset, double length, Object position,
-			MyStaticFunc call) throws IOException {
+	public void write(double fd, List<Byte> buf, int offset, double length, Object position, MyStaticFunc call)
+			throws IOException {
 		if (offset != 0 || ((int) length) != buf.size() || !Builtins.isUndefinedOrNull(position)) {
 			execute(call, Errors.newEnoSys());
 			return;
@@ -88,8 +88,8 @@ public class FileSystem {
 		execute(call, JsNull.S, n, buf);
 	}
 
-	public void read(double fd, List<Byte> buf, int offset, double length, Object position,
-			MyStaticFunc call) throws IOException {
+	public void read(double fd, List<Byte> buf, int offset, double length, Object position, MyStaticFunc call)
+			throws IOException {
 		var fileDesc = _fileDesc.get((int) fd);
 		var buff = ArrayUtils.toPrimitive(buf.toArray(new Byte[buf.size()]));
 		if (position instanceof Double) {
@@ -98,7 +98,8 @@ public class FileSystem {
 		}
 		var n = fileDesc.getHandle().read(buff, offset, (int) length);
 		Buffers.overwrite(buf, buff);
-		execute(call, JsNull.S, n, buf);
+		var readBytes = Math.max(0, n);
+		execute(call, JsNull.S, readBytes, buf);
 	}
 
 	public void open(String path, double flags, double mode, MyStaticFunc call)
