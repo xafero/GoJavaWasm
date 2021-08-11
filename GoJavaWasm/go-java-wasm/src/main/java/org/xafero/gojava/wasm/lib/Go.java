@@ -139,7 +139,7 @@ public class Go implements AutoCloseable {
 		var id = _mem.readInt32(_store, sp + 8);
 		clearTimeout(_scheduledTimeouts.get(id));
 		_scheduledTimeouts.remove(id);
-		_log.trace("clearTimeoutEvent {id}", id);
+		_log.trace("clearTimeoutEvent {}", id);
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class Go implements AutoCloseable {
 		sp >>= 0;
 		var buf = loadSlice(sp + 8);
 		Crypto.getRandomValues(buf);
-		_log.trace("getRandomData {buf}", buf.limit());
+		_log.trace("getRandomData {}", buf.limit());
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class Go implements AutoCloseable {
 			_ids.remove(v);
 			_idPool.push(id);
 		}
-		_log.trace("finalizeRef {id}", id);
+		_log.trace("finalizeRef {}", id);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class Go implements AutoCloseable {
 		sp >>= 0;
 		var longVal = ProcSystem.getNanoTime() * 1000;
 		setInt64(sp + 8, longVal);
-		_log.trace("nanoTime {val}", longVal);
+		_log.trace("nanoTime {}", longVal);
 	}
 
 	/**
@@ -196,7 +196,7 @@ public class Go implements AutoCloseable {
 		setInt64(sp + 8, mVal);
 		var val = (msec % 1000) * 1000000;
 		_mem.writeInt32(_store, sp + 16, (int) val);
-		_log.trace("walltime {mVal} {val}", mVal, val);
+		_log.trace("walltime {} {}", mVal, val);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class Go implements AutoCloseable {
 		sp >>= 0;
 		var txt = loadString(sp + 8);
 		storeValue(sp + 24, txt);
-		_log.trace("stringVal '{val}'", txt);
+		_log.trace("stringVal '{}'", txt);
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class Go implements AutoCloseable {
 			sp = getSp() >> 0;
 			storeValue(sp + 40, result);
 			_mem.writeByte(_store, sp + 48, (byte) 1);
-			_log.trace("valueInvoke {v} {args} {result}", v, args, result);
+			_log.trace("valueInvoke {} {} {}", v, args, result);
 		} catch (Exception err) {
 			storeValue(sp + 40, err);
 			_mem.writeByte(_store, sp + 48, (byte) 0);
@@ -246,7 +246,7 @@ public class Go implements AutoCloseable {
 			sp = getSp() >> 0;
 			storeValue(sp + 40, result);
 			_mem.writeByte(_store, sp + 48, (byte) 1);
-			_log.trace("valueNew {v} {args} {result}", v, args, result);
+			_log.trace("valueNew {} {} {}", v, args, result);
 		} catch (Exception err) {
 			storeValue(sp + 40, err);
 			_mem.writeByte(_store, sp + 48, (byte) 0);
@@ -267,7 +267,7 @@ public class Go implements AutoCloseable {
 		else
 			num = Array.getLength(val);
 		setInt64(sp + 16, num);
-		_log.trace("valueLength {val} {num}", val, num);
+		_log.trace("valueLength {} {}", val, num);
 	}
 
 	/**
@@ -359,7 +359,7 @@ public class Go implements AutoCloseable {
 		Buffers.overwrite(dst, toCopy);
 		setInt64(sp + 40, toCopy.length);
 		_mem.writeByte(_store, sp + 48, (byte) 1);
-		_log.trace("copyBytesToGo {src} {dst} {toCopy}", srcArray.size(), dst.limit(), toCopy.length);
+		_log.trace("copyBytesToGo {} {} {}", srcArray.size(), dst.limit(), toCopy.length);
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class Go implements AutoCloseable {
 		Buffers.refill(dstArray, toCopy);
 		setInt64(sp + 40, toCopy.length);
 		_mem.writeByte(_store, sp + 48, (byte) 1);
-		_log.trace("copyBytesToJS {src} {dst} {toCopy}", src.limit(), dstArray.size(), toCopy.length);
+		_log.trace("copyBytesToJS {} {} {}", src.limit(), dstArray.size(), toCopy.length);
 	}
 
 	private String loadString(int addr) {
@@ -420,7 +420,7 @@ public class Go implements AutoCloseable {
 		var result = Reflect.get(ref, str);
 		sp = getSp() >> 0;
 		storeValue(sp + 32, result);
-		_log.trace("valueGet {ref} {str} {result}", ref, str, result);
+		_log.trace("valueGet {} {} {}", ref, str, result);
 	}
 
 	/**
@@ -434,7 +434,7 @@ public class Go implements AutoCloseable {
 		var name = loadString(sp + 16);
 		var val = loadValue(sp + 32);
 		Reflect.set(obj, name, val);
-		_log.trace("valueSet {obj} {name} {val}", obj, name, val);
+		_log.trace("valueSet {} {} {}", obj, name, val);
 	}
 
 	/**
@@ -447,7 +447,7 @@ public class Go implements AutoCloseable {
 		var obj = loadValue(sp + 8);
 		var name = loadString(sp + 16);
 		Reflect.deleteProperty(obj, name);
-		_log.trace("valueDelete {obj} {name}", obj, name);
+		_log.trace("valueDelete {} {}", obj, name);
 	}
 
 	/**
@@ -461,7 +461,7 @@ public class Go implements AutoCloseable {
 		var index = getInt64(sp + 16);
 		var item = Reflect.get(obj, index);
 		storeValue(sp + 24, item);
-		_log.trace("valueIndex {obj} {index} {item}", obj, index, item);
+		_log.trace("valueIndex {} {} {}", obj, index, item);
 	}
 
 	private void storeValue(int addr, Object v) {
@@ -513,7 +513,7 @@ public class Go implements AutoCloseable {
 
 		_mem.writeInt32(_store, addr + 4, nanHead | typeFlag);
 		_mem.writeInt32(_store, addr, id);
-		_log.trace("storeValue {typeFlag} {id} {addr}", typeFlag, id, addr);
+		_log.trace("storeValue {} {} {}", typeFlag, id, addr);
 	}
 
 	/**
@@ -545,7 +545,7 @@ public class Go implements AutoCloseable {
 			sp = getSp() >> 0;
 			storeValue(sp + 56, result);
 			_mem.writeByte(_store, sp + 64, (byte) 1);
-			_log.trace("valueCall {v} {name} {m} {args} {result}", v, name, m, args, result);
+			_log.trace("valueCall {} {} {} {} {}", v, name, m, args, result);
 		} catch (Exception err) {
 			storeValue(sp + 56, err);
 			_mem.writeByte(_store, sp + 64, (byte) 0);
@@ -574,7 +574,7 @@ public class Go implements AutoCloseable {
 		_ids.clear();
 		_idPool.clear();
 		exit((int) code);
-		_log.trace("wasmExit {code}", code);
+		_log.trace("wasmExit {}", code);
 	}
 
 	/**
@@ -591,7 +591,7 @@ public class Go implements AutoCloseable {
 		var bytes = new byte[n];
 		slice.get(bytes);
 		_fs.writeSync(fd, bytes);
-		_log.trace("wasmWrite {fd} {p} {n} {slice}", fd, p, n, bytes.length);
+		_log.trace("wasmWrite {} {} {} {}", fd, p, n, bytes.length);
 	}
 
 	private void debug(int value) {
@@ -621,7 +621,7 @@ public class Go implements AutoCloseable {
 		sp >>= 0;
 		var ref = loadValue(sp + 8);
 		var tr = loadValue(sp + 16);
-		_log.trace("valueInstanceOf {ref} {tr}", ref, tr);
+		_log.trace("valueInstanceOf {} {}", ref, tr);
 	}
 
 	/**
@@ -644,7 +644,7 @@ public class Go implements AutoCloseable {
 		}, getInt64(sp + 8) + 1)); // setTimeout has been seen to fire up to 1 millisecond early
 
 		_mem.writeInt32(_store, sp + 16, id);
-		_log.trace("scheduleTimeoutEvent {id}", id);
+		_log.trace("scheduleTimeoutEvent {}", id);
 	}
 
 	private void resume() {
