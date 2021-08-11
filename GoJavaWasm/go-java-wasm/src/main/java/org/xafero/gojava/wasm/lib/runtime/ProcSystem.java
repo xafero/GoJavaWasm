@@ -16,7 +16,7 @@ public class ProcSystem {
 		return dir;
 	}
 
-	public long pid() {
+	public long getPid() {
 		return ProcessHandle.current().pid();
 	}
 
